@@ -35,6 +35,10 @@ export function getUCR(ucrObjects: Record<string, UcrObject[]>) {
 
 export function getUpdatedItems(array: UcrObject[]) {
   return array
+    .filter(
+      (object) =>
+        !Object.values(object).some(({ action }) => action === "REMOVE")
+    )
     .filter((object) =>
       Object.values(object).some(({ action }) => action === "UPDATE")
     )
