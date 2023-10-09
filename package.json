@@ -1,10 +1,18 @@
 {
   "name": "ucr",
+  "author": "Diego Ramos <RamosDiego@pm.me>",
   "license": "MIT",
   "version": "0.0.3",
   "publishConfig": {
     "access": "public"
   },
+  "description": "Transform a form's state into its update, create and remove parts.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ramozdev/ucr.git"
+  },
+  "homepage": "https://ucr-form.vercel.app/",
+  "bugs": "https://github.com/ramozdev/ucr/issues",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -13,6 +21,13 @@
     "release": "pnpm run build && changeset publish",
     "lint": "tsc"
   },
+  "keywords": [
+    "crud",
+    "frontend",
+    "backend",
+    "form",
+    "edit"
+  ],
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "tsup": "^7.2.0",
