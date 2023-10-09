@@ -1,20 +1,26 @@
 # UCR
 
-## The problem
+UCR stands for Update, Create, Remove. The `ucr` package contains functions to transform a form's state into its `create`, `update`, and `remove` parts.
 
-We want to have complex forms where multipla database tables can be modified. In order to improve the user experience we wanted all of these actions to happen only when the user presses the `Save Changes` button. This means that we need to track the state of the form and detect which items have been created, updated, or deleted.
+There are two main benefits to following the UCR convention:
 
-Instead of sending the current state of the form to the backend, we want to transform the state of the form into a `create`, `remove` and `update` object containing only the items that have been modified.
+1. Only the data that has changed is sent to the backend. This reduces the amount of data sent over the network and improves performance.
 
-There are two main reasons for this:
+2. The backend is simplified because it only requires `create`, `remove` and `update` functions which can even be shared in different forms containing the same tables. This approach makes the backend less prone to errors.
 
-1. We want to only update columns that have been modified. This is important for performance reasons. If we send the entire state of the form to the backend, we may be updating columns that have not been modified.
+Thus, the UCR convention simplifies the backend code, improves performance and reliability.
 
-2. We want to make the backend as simple as possible. Functions should only perform one action. In this manner we would have `create`, `remove` and `update` functions which can even be shared in different forms containing the same tables. If we send the entire state of the form to the backend, we will have to write code to handle all of the different cases. This approach is more prone to error.
+## Installation
 
-## The solution
+To start using `ucr`, install it in your project:
 
-The UCR form convention aims to provide a standard way to transform the state of a form into a `create`, `update`, and `remove` object. This object can then be sent to the backend to be processed.
+```ts
+pnpm i ucr
+```
+
+## The convention
+
+The following is an example of the output returned by the `getUCR` function:
 
 ```json
 {
@@ -48,6 +54,14 @@ The UCR form convention aims to provide a standard way to transform the state of
   }
 }
 ```
+
+The UCR convention is tied to the SQL database structure and it has three parts:
+
+- `update`: The data to be updated in the database. The `update` object contains a key for each table to be updated. Each table key contains an array of objects to be updated. Each object must have an `id` used to find the row in the table. The rest of the keys are the columns to be updated.
+
+- `create`: The data to be created in the database. The `create` object contains a key for each table to be created. Each table contains an array of objects to be created. Each object contains the columns to be created.
+
+- `remove`: The data to be removed from the database. The `remove` object contains a key for each table to be modified. Each table contains an array of `id`s to be removed.
 
 ### UCRObject
 
@@ -195,6 +209,7 @@ In this example we are updating the todo list name and description, updating the
 We propose providing a set of functions which can be used to generate a payload object to be sent to the backend.
 
 ```ts
+import { getUCR } from "ucr";
 // the `todo` and `tasks` objects come from your form
 const payload = getUCR({
   todos: [todo],
